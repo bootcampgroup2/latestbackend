@@ -29,7 +29,7 @@
 								<br> ""This channel is created to share the knowledge and
 								to gain the knowledge"<br>
 								<br>"Sharing the knowledge is biggest learning" <br> <br>
-								<br> <br> <b>${Name}</b><br>${location}<br>
+								<br> <br> <b>${message}</b><br>${location}<br>
 								<br>
 							</div>
 						</td>
