@@ -27,7 +27,7 @@ public class OrderController {
         orderEvent.setStatus("Pending");
         orderEvent.setMessage("order status is in pending state");
         orderEvent.setOrder((order));
-        orderEvent.setEmail("janhavimudaliar@gmail.com");
+        orderEvent.setEmail("r3550510@gmail.com");
         orderEvent.setIsInstantEmail(true);
 
 

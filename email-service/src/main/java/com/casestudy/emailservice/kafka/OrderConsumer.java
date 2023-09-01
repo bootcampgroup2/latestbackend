@@ -81,7 +81,7 @@ public class OrderConsumer {
 
         Template t = config.getTemplate("email-template.ftl");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
-        helper.setFrom("ammu16042001@gmail.com");
+        helper.setFrom("p87773623@gmail.com");
         helper.setTo(toEmail);
         helper.setText(html,true);
         helper.setSubject(Subject);
