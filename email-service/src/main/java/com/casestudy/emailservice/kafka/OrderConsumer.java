@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.casestudy.emailservice.models.Ordermail;
+import com.casestudy.emailservice.repositories.OrdermailRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,34 +40,44 @@ public class OrderConsumer {
     @Autowired
     private Configuration config;
 
+    @Autowired
+    private OrdermailRepository ordermailRepository;
+
 
     @KafkaListener(topics = "${spring.kafka.topic.name}",groupId = "${spring.kafka.consumer.group-id}")
     public  void  consume(OrderEvent event) throws MessagingException{
-    	
-    	Map<String,Object> model = new HashMap<>();
+//        System.out.println(event);
+        ordermailRepository.save(new Ordermail(event.getEmail(), event.toString(),false));
+//        for (Ordermail ordermail: ordermailRepository.findOne()){
+//            System.out.println(ordermail);
+//        }
+
+        Map<String,Object> model = new HashMap<>();
     	model.put("message",event.getMessage());
     	model.put("orderId",event.getOrder().getOrderId());
     	model.put("name", event.getOrder().getName());
     	model.put("quantity",event.getOrder().getQty());
     	model.put("price",event.getOrder().getPrice());
+//
         if(event.getIsInstantEmail()){
-            LOGGER.info(String.format("Order event recieved in email service => %s",event.toString()));
+            LOGGER.info("Order event recieved in email service => %models",event.toString());
             simpleEmail(event.getEmail(),event,"Order",model);
+            System.out.println(event.getEmail());
             System.out.println("Called simpleemail!!!");
         }else{
             System.out.println("Send email to user subscribed to an event");
         }
-//        LOGGER.info(String.format("Order event recieved in email service => %s",event.toString()));
-//        try {
-//            // Sleep for 1 minute (60,000 milliseconds)
-//            Thread.sleep(60000);
-//        } catch (InterruptedException e) {
-//            // Handle the InterruptedException
-//            // For example, you can log the interruption and decide how to proceed
-//            Thread.currentThread().interrupt();  // Reset the interrupted status
-//        }
+        LOGGER.info("Order event recieved in email service => %models",event.toString());
+        try {
+            // Sleep for 1 minute (60,000 milliseconds)
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            // Handle the InterruptedException
+            // For example, you can log the interruption and decide how to proceed
+            Thread.currentThread().interrupt();  // Reset the interrupted status
+        }
 //        simpleEmail("shivanii2607@gmail.com",event,"Order");
-//        System.out.println("Called simpleemail!!!");
+        System.out.println("Called simpleemail!!!");
 
     }
 
@@ -87,7 +99,7 @@ public class OrderConsumer {
         helper.setSubject(Subject);
 
         mailSender.send(message);
-       
+
         System.out.println("Mail Send....");
     	}catch(MessagingException|IOException|TemplateException e) {
     		System.out.println("Failed");
