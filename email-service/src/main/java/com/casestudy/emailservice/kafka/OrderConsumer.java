@@ -6,6 +6,7 @@ package com.casestudy.emailservice.kafka;
 
 import com.casestudy.basedomain.dto.OrderEvent;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -87,8 +88,6 @@ public class OrderConsumer {
         helper.setSubject(Subject);
 
         mailSender.send(message);
-       
-        System.out.println("Mail Send....");
     	}catch(MessagingException|IOException|TemplateException e) {
     		System.out.println("Failed");
     	}
