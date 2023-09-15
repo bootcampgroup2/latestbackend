@@ -1,27 +1,20 @@
 package com.model;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="user")
 public class User {
 
-	@Id
 	private String userName;
 	private String password;
 	private String email;
-	private String address;
-	private String mobile;
-	
-	public User() {}
-	
-	public User(String userName, String password, String email, String address, String mobile) {
+	private String dOB;
+	public User(String userName, String password, String email, String dOB) {
 		super();
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
-		this.address = address;
-		this.mobile = mobile;
+		this.dOB = dOB;
 	}
 	public String getUserName() {
 		return userName;
@@ -41,23 +34,17 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getAddress() {
-		return address;
+	public String getdOB() {
+		return dOB;
 	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getMobile() {
-		return mobile;
-	}
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setdOB(String dOB) {
+		this.dOB = dOB;
 	}
 	@Override
 	public String toString() {
-		return "User [userName=" + userName + ", password=" + password + ", email=" + email + ", address=" + address
-				+ ", mobile=" + mobile + "]";
+		return "User [userName=" + userName + ", password=" + password + ", email=" + email + ", dOB=" + dOB + "]";
 	}
+	
 	
 	
 }
