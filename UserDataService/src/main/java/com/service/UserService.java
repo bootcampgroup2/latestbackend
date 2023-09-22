@@ -1,9 +1,9 @@
 package com.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,7 @@ public class UserService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
+	
 	public List<User> getAllUsers(){
 		List<User> userList = new ArrayList<>();
 		userList = userRepository.findAll();
@@ -28,6 +29,7 @@ public class UserService {
 	
 	public User getUser(String email) {
 		User user = userRepository.findByEmail(email);
+		System.out.println(user);
 		if(user != null) {
 			return user;
 		}
@@ -43,7 +45,13 @@ public class UserService {
 		}else {
 			return true;
 		}
-
+	}
+	
+	public void updateUser(String email) {
+		User user = userRepository.findByEmail(email);
+		userRepository.deleteByEmail(email);
+		user.setNotificationsAllowed(!user.getNotificationsAllowed());
+		userRepository.save(user);
 	}
 	
 	public void addUser(User user) throws CustomException {
@@ -52,16 +60,16 @@ public class UserService {
 			String password = user.getPassword();
 			String encodedPassword = passwordEncoder.encode(password);
 			user.setPassword(encodedPassword);
+			user.setNotificationsAllowed(true);
 			userRepository.save(user);
 		}else {
 			throw new CustomException("email already exists");
 		}
-		
 	}
 	
-	public void deleteUser(String username) {
+	public void deleteUser(String email) {
 		
-		userRepository.deleteById(username);
+		userRepository.deleteByEmail(email);
 		
 	}
 }

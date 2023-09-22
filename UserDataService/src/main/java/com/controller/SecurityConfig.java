@@ -9,9 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors(); // Enable CORS
-        http.csrf().disable(); // Disable CSRF protection (for simplicity, you can enable it as needed)
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		
+		http.csrf().disable()
+			.authorizeRequests()
+			.antMatchers("/user/adduser","/user/deleteuser")
+			.permitAll();
+	
+	}
 }

@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.repository.UserRepository;
 
-@SpringBootApplication(scanBasePackages = {"com.controller","com.service","com.exception"})
+@SpringBootApplication(scanBasePackages = {"com.controller","com.service","com.exception","com.kafka"})
 @EnableMongoRepositories("com.repository")
 
 public class UserDataServiceApplication {

@@ -1,20 +1,26 @@
 package com.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="user")
+@Document("user")
 public class User {
 
 	private String userName;
 	private String password;
 	private String email;
 	private String dOB;
-	public User(String userName, String password, String email, String dOB) {
+
+	private Boolean notificationsAllowed;
+
+	public User(){}
+	public User(String userName, String password, String email, String dOB, Boolean notifications) {
 		super();
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
 		this.dOB = dOB;
+		this.notificationsAllowed = notifications;
 	}
 	public String getUserName() {
 		return userName;
@@ -31,6 +37,15 @@ public class User {
 	public String getEmail() {
 		return email;
 	}
+
+	public Boolean getNotificationsAllowed() {
+		return notificationsAllowed;
+	}
+
+	public void setNotificationsAllowed(Boolean notifications) {
+		this.notificationsAllowed = notifications;
+	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -40,11 +55,17 @@ public class User {
 	public void setdOB(String dOB) {
 		this.dOB = dOB;
 	}
+
 	@Override
 	public String toString() {
-		return "User [userName=" + userName + ", password=" + password + ", email=" + email + ", dOB=" + dOB + "]";
+		return "User{" +
+				"userName='" + userName + '\'' +
+				", password='" + password + '\'' +
+				", email='" + email + '\'' +
+				", dOB='" + dOB + '\'' +
+				", notifications=" + notificationsAllowed +
+				'}';
 	}
-	
-	
-	
+
+
 }
