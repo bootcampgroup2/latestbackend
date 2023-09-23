@@ -109,7 +109,6 @@ public class OrderConsumer {
             System.out.println("Called simpleemail!!!");
     	}
         
-
     }
     
     @KafkaListener(topics = "user_topics", groupId = "${spring.kafka.consumer.group-id}")

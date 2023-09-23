@@ -17,6 +17,15 @@ public class MessageService {
     private OrdermailRepository orderMailRepository;
 
     public List<Ordermail> getUnreadMessagesByEmail(String email) {
-        return orderMailRepository.findByEmail(email);
+        return orderMailRepository.findByEmailAndRead(email,false);
+    }
+    
+    public void updateToRead(String id) {
+    	
+    	System.out.println("Given id:"+id);
+    	Ordermail orderMail = orderMailRepository.findById(id).get();
+    	System.out.println(orderMail);
+    	orderMail.setRead(true);
+    	orderMailRepository.save(orderMail);
     }
 }
