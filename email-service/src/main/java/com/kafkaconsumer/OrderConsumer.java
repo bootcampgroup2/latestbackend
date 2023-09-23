@@ -5,6 +5,7 @@ package com.kafkaconsumer;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.model.Event;
 import com.model.OrderEvent;
 import com.model.Ordermail;
 import com.model.RegisterEvent;
@@ -84,14 +85,12 @@ public class OrderConsumer {
     	model.put("from", "p87773623@gmail.com,e-Mail Notify");
     	Ordermail order = new Ordermail(event.getEmail(),model,false,"high");
     	
-    	System.out.println(event.getOrder());
         ordermailRepository.save(order);
         
         if(res.getBody().getNotificationsAllowed() == true) {
         	if(event.getIsInstantEmail()){
                 LOGGER.info("Order event recieved in email service => %models",event.toString());
                 simpleEmail(event.getEmail(),"Order",model);
-                System.out.println(event.getEmail());
                 System.out.println("Called simpleemail!!!");
             }else{
                 System.out.println("Send email to user subscribed to an event");
@@ -113,8 +112,7 @@ public class OrderConsumer {
     
     @KafkaListener(topics = "user_topics", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeUser(RegisterEvent event) throws JsonProcessingException, MessagingException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        RegisterEvent event = objectMapper.readValue(registerMessage, RegisterEvent.class);
+    	
     	LOGGER.info("Received OrderEvent: {}", event);
 
     	LocalDateTime currentDateTime = LocalDateTime.now();
@@ -133,7 +131,28 @@ public class OrderConsumer {
 //        System.out.println("Received message from user_topic: " + message);
 
     }
+    
+    @KafkaListener(topics = "bulk_notification", groupId = "${spring.kafka.consumer.group-id}")
+    public void consumeBulkNotification(Event event) throws JsonProcessingException, MessagingException {
+    	
+    	LOGGER.info("Received Bulk Notification: {}", event);
+    	LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
+    	 Map<String,Object> model = new HashMap<>();
+         model.put("message",event.getMessage());
+         model.put("email", event.getEmail());
+         model.put("event", "Promotion");
+         model.put("dateAndTime",formattedDateTime);
+         model.put("from", "p87773623@gmail.com,e-Mail Notify");
+         
+         ordermailRepository.save(new Ordermail(event.getEmail(),model,false,"low"));
+         simpleEmail(event.getEmail(), "Promotions", model);
 
+    }
+
+    
+    
     public void simpleEmail(String toEmail,String Subject,Map<String,Object> model) throws MessagingException{
 
 
@@ -148,8 +167,10 @@ public class OrderConsumer {
         Template t; 
         if(Subject=="Order") {
         	t = config.getTemplate("email-template.ftl");
-        }else {
+        }else if(Subject=="Registration") {
         	t = config.getTemplate("register-template.ftl");
+        }else {
+        	t = config.getTemplate("promotion-template.ftl");
         }
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
         helper.setFrom("p87773623@gmail.com","e-Mail Notify");

@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface OrdermailRepository extends MongoRepository<Ordermail, String> {
-    List<Ordermail> findByEmailAndRead(String email,Boolean flag);
+    List<Ordermail> findByEmail(String email);
 }

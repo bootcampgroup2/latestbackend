@@ -27,20 +27,6 @@ public class UserSignUpProducer {
         RegisterEvent event = new RegisterEvent();
         event.setMessage("User with ID " + user.getEmail() + " has signed up.");
         event.setEmail(user.getEmail());
-//        // Serialize the message object to JSON
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String jsonMessage;
-//        try {
-//            jsonMessage = objectMapper.writeValueAsString(event);
-//        } catch (JsonProcessingException e) {
-//            // Handle JSON serialization error
-//            LOGGER.error("Error serializing message to JSON: " + e.getMessage());
-//            return; // Exit the method if there's an error
-//        }
-//        LOGGER.info("UserSignin => %models", jsonMessage);
-////        String message = "User with ID " + user.getEmail() + " has signed in.";
-//        kafkaTemplate.send(TOPIC_NAME, jsonMessage);
-////        System.out.println("Produced message for email: " + message);
         Message<RegisterEvent> message = MessageBuilder
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, TOPIC_NAME)
